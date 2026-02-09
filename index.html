@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THE LICKY_T FILES - CLASSIFIED</title>
+
+    <!-- Audio Elements -->
+    <audio id="bgMusic" loop>
+        <source src="your-spy-theme-music.mp3" type="audio/mpeg">
+    </audio>
+   
+    <audio id="revealSound">
+        <source src="reveal-sound.mp3" type="audio/mpeg">
+    </audio>
+
     <style>
         * {
             margin: 0;
@@ -16,6 +26,7 @@
             color: #e0e0e0;
             font-family: 'Courier New', monospace;
             overflow-x: hidden;
+            overflow: hidden;
         }
 
         .scanlines {
@@ -240,6 +251,35 @@
             color: #666;
         }
 
+        .mute-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #ff0000;
+            color: #000;
+            border: 2px solid #fff;
+            padding: 15px 25px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            z-index: 10000;
+            letter-spacing: 2px;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+            transition: all 0.3s;
+        }
+
+        .mute-button:hover {
+            background: #fff;
+            color: #ff0000;
+            transform: scale(1.05);
+        }
+
+        .mute-button.muted {
+            background: #333;
+            color: #666;
+        }
+
         .stats-image {
             width: 100%;
             max-width: 800px;
@@ -305,6 +345,46 @@
             }
         }
 
+        .start-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    backdrop-filter: blur(10px);
+}
+
+.start-button {
+    background: #ff0000;
+    color: #000;
+    border: 3px solid #fff;
+    padding: 30px 60px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 24px;
+    cursor: pointer;
+    letter-spacing: 4px;
+    box-shadow: 0 0 40px rgba(255, 0, 0, 0.8);
+    animation: pulse 2s infinite;
+    text-align: center;
+}
+
+.start-button:hover {
+    background: #fff;
+    color: #ff0000;
+    transform: scale(1.1);
+}
+
+.hidden {
+    display: none;
+}
+
+
         .blink {
             animation: blink 1.5s infinite;
         }
@@ -316,6 +396,13 @@
     </style>
 </head>
 <body>
+    <div class="start-overlay" id="startOverlay">
+    <button class="start-button" id="startBtn">
+        ▶ BEGIN INVESTIGATION<br>
+        <span style="font-size: 14px; letter-spacing: 2px;">CLICK TO ENTER</span>
+    </button>
+</div>
+    <button class="mute-button" id="muteBtn">🔊 AUDIO ON</button>
     <div class="scanlines"></div>
     
     <div class="header">
@@ -897,10 +984,70 @@
             THIS INVESTIGATION REMAINS ONGOING. STAY VIGILANT.
         </p>
         <p style="margin-top: 30px; font-size: 10px;">
-            Disclaimer: This is a parody website created for entertainment purposes. All "evidence" is presented in jest.<br>
-            Go watch LICKY_T's stream. He's actually pretty cool. (Or is he? THE FILES DON'T LIE.)
+            SUB TO GREEDY_T OR THIS FILE WILL SELF-DESTRUCT IN 5 SECONDS
         </p>
     </div>
+
+    <script>
+    // Get audio elements
+    const bgMusic = document.getElementById('bgMusic');
+    const revealSound = document.getElementById('revealSound');
+    const muteBtn = document.getElementById('muteBtn');
+    
+    let isMuted = false;
+    let hasStarted = false;
+
+    // Auto-play music on first user interaction
+    // Start button - begins audio
+    startBtn.addEventListener('click', function() {
+        bgMusic.volume = 0.3;
+        bgMusic.play();
+        startOverlay.classList.add('hidden');
+        //aloow scorlling after start
+        document.body.style.overflow = 'auto';
+        hasStarted = true;
+    });
+
+
+    // Mute button functionality
+    muteBtn.addEventListener('click', function() {
+        isMuted = !isMuted;
+        
+        if (isMuted) {
+            bgMusic.volume = 0;
+            revealSound.volume = 0;
+            muteBtn.textContent = '🔇 AUDIO OFF';
+            muteBtn.classList.add('muted');
+        } else {
+            bgMusic.volume = 0.3;
+            revealSound.volume = 1;
+            muteBtn.textContent = '🔊 AUDIO ON';
+            muteBtn.classList.remove('muted');
+        }
+    });
+
+    
+
+    // Reveal sounds when sections come into view
+    const sections = document.querySelectorAll('.section, .testimony, .evidence-box');
+    const observerOptions = {
+        threshold: 0.3,
+        rootMargin: '0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !entry.target.hasAttribute('data-revealed') && hasStarted && !isMuted) {
+                revealSound.currentTime = 0;
+                revealSound.volume = 1;
+                revealSound.play().catch(e => {});
+                entry.target.setAttribute('data-revealed', 'true');
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => observer.observe(section));
+</script>
 
 </body>
 </html>
