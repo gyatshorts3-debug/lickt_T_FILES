@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE LICKY_T FILES - CLASSIFIED</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #e0e0e0;
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .header {
+            background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+            border-bottom: 3px solid #ff0000;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 5px 30px rgba(255, 0, 0, 0.3);
+        }
+
+        .classified-stamp {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            color: #ff0000;
+            font-size: 14px;
+            font-weight: bold;
+            border: 3px solid #ff0000;
+            padding: 5px 15px;
+            transform: rotate(15deg);
+            letter-spacing: 3px;
+        }
+
+        .live-indicator {
+            display: inline-block;
+            background: #ff0000;
+            color: #000;
+            padding: 8px 20px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        h1 {
+            font-size: 48px;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(255, 0, 0, 0.5);
+            letter-spacing: 8px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #ff0000;
+            font-size: 18px;
+            letter-spacing: 4px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .case-number {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-left: 4px solid #ff0000;
+            padding: 20px;
+            margin-bottom: 40px;
+            font-size: 14px;
+        }
+
+        .case-number strong {
+            color: #ff0000;
+        }
+
+        .section {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            margin-bottom: 40px;
+            padding: 30px;
+            position: relative;
+        }
+
+        .section::before {
+            content: 'EVIDENCE';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #0a0a0a;
+            padding: 0 10px;
+            color: #ff0000;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        h2 {
+            color: #ff0000;
+            font-size: 32px;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #fff;
+            font-size: 24px;
+            margin: 30px 0 15px 0;
+            letter-spacing: 2px;
+        }
+
+        .redacted {
+            background: #000;
+            color: #000;
+            padding: 2px 8px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .redacted::after {
+            content: '█████████';
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #000;
+            background: #000;
+            padding: 2px 8px;
+        }
+
+        p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .timeline {
+            margin: 30px 0;
+            padding-left: 30px;
+            border-left: 3px solid #ff0000;
+        }
+
+        .timeline-item {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '●';
+            position: absolute;
+            left: -38px;
+            color: #ff0000;
+            font-size: 24px;
+        }
+
+        .timeline-date {
+            color: #ff0000;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .evidence-box {
+            background: #0f0f0f;
+            border: 2px solid #ff0000;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+        }
+
+        .quote {
+            font-style: italic;
+            color: #ff0000;
+            font-size: 20px;
+            margin: 20px 0;
+            padding: 20px;
+            border-left: 4px solid #ff0000;
+            background: #0f0f0f;
+        }
+
+        .testimony {
+            background: #0f0f0f;
+            border: 1px solid #333;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .testimony-header {
+            color: #ff0000;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .testimony-image {
+            width: 100%;
+            /* max-width: 600px; */
+            height: 200px;
+            background: #1a1a1a;
+            border: 2px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+            color: #666;
+        }
+
+        .stats-image {
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            background: #1a1a1a;
+            border: 3px solid #ff0000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px auto;
+            color: #666;
+            font-size: 18px;
+        }
+
+        .warning {
+            background: #ff0000;
+            color: #000;
+            padding: 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+            letter-spacing: 2px;
+            margin: 40px 0;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+        }
+
+        .conclusion {
+            background: #1a1a1a;
+            border: 3px solid #ff0000;
+            padding: 40px;
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            font-size: 12px;
+            border-top: 2px solid #333;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+                letter-spacing: 4px;
+            }
+            
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            .classified-stamp {
+                font-size: 10px;
+                padding: 3px 10px;
+            }
+        }
+
+        .blink {
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="scanlines"></div>
+    
+    <div class="header">
+        <div class="classified-stamp">CLASSIFIED</div>
+        <div class="live-indicator blink">● LIVE EXPOSURE</div>
+        <h1>THE LICKY_T FILES</h1>
+        <div class="subtitle">OPERATION: GREEDY_T</div>
+    </div>
+
+    <div class="container">
+        <div class="case-number">
+            <strong>CASE ID:</strong> LT-2024-ZOINK <strong>STATUS:</strong> ACTIVE INVESTIGATION<br>
+            <strong>SUBJECT:</strong> LICKY_T (AKA GREEDY_T) <strong>CLASSIFICATION:</strong> EXTREME GREED<br>
+            <strong>INCIDENT DATE:</strong> THE ZOINK RAID <strong>THREAT LEVEL:</strong> <span style="color: #ff0000;">MAXIMUM</span>
+        </div>
+
+        <div class="warning">
+            ⚠ WARNING: THE FOLLOWING DOCUMENTS CONTAIN SENSITIVE INFORMATION REGARDING THE CORRUPTION OF A ONCE-BELOVED STREAMER ⚠
+        </div>
+
+        <div class="section">
+            <h2>EXECUTIVE SUMMARY</h2>
+            <p>
+                This classified dossier contains irrefutable evidence documenting the complete transformation of streaming personality 
+                known as "LICKY_T" into the entity now referred to as "GREEDY_T". Our investigation has uncovered a disturbing pattern 
+                of behavioral changes following what we now call "THE ZOINK RAID INCIDENT" - a watershed moment that forever altered 
+                the subject's relationship with their viewership base.
+            </p>
+            <p>
+                What you are about to read represents months of investigation, dozens of witness testimonies, and countless hours 
+                of archived footage analysis. The evidence is clear: LICKY_T is no longer the streamer we once knew.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>FILE 001: THE SUBJECT - PRE-INCIDENT PROFILE</h2>
+            
+            <h3>IDENTITY: <span class="redacted">LICKY_T</span></h3>
+            
+            <p>
+                Before the incident now known as "THE ZOINK RAID," Subject LICKY_T operated as what intelligence analysts classified 
+                as a "genuine creator" - a rare designation in the streaming community. Our surveillance and analysis of archived 
+                broadcasts paint a picture of an individual who exhibited extraordinary dedication to their craft and community.
+            </p>
+
+            <div class="evidence-box">
+                <strong>BEHAVIORAL PROFILE - PRE-INCIDENT:</strong>
+                <ul style="margin-top: 10px; line-height: 2;">
+                    <li>✓ Subject demonstrated consistent pattern of reading EVERY chat message</li>
+                    <li>✓ Displayed genuine emotional reactions to viewer interactions</li>
+                    <li>✓ Followed protocol of acknowledging every single bit donation with enthusiasm</li>
+                    <li>✓ Exhibited week-long elevated mood following new follower notifications</li>
+                    <li>✓ Month-long celebration periods observed after subscription events</li>
+                    <li>✓ Annual-level excitement documented for monetary donations</li>
+                    <li>✓ Maintained small but deeply loyal viewer base</li>
+                    <li>✓ Zero advertisements run during broadcast hours</li>
+                </ul>
+            </div>
+
+            <p>
+                Subject maintained what operatives described as an "intimate streaming environment." With viewer counts typically 
+                ranging in the low double digits, LICKY_T was able to personally engage with each individual chatter. Field reports 
+                indicate that viewers felt personally valued and recognized. The subject's authenticity was considered unquestionable.
+            </p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">EARLY CAREER PERIOD</div>
+                    <p>Subject began streaming operations with pure intentions. Every viewer was treated like family. Chat interaction 
+                    was the primary focus of broadcasts. Gaming was secondary to community building. Subject often spent entire streams 
+                    just talking with the 8-15 regular viewers who showed up daily.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">PRE-ZOINK ERA</div>
+                    <p>Intelligence gathered from this period shows Subject LICKY_T at peak authenticity. Recorded instances include: 
+                    stopping gameplay mid-action to respond to chat questions, celebrating a 2-bit donation with genuine tears of joy, 
+                    creating custom emotes based on inside jokes with individual chatters, and spending 45 minutes discussing one viewer's 
+                    day at work. Subject was, by all accounts, "a real one."</p>
+                </div>
+            </div>
+
+            <div class="quote">
+                "He was one of us. A small streamer who genuinely cared about every single person who showed up. It didn't matter 
+                if you were the only viewer or one of twenty - he made you feel seen."
+                <br>- WITNESS TESTIMONY [REDACTED]
+            </div>
+
+            <p>
+                This was LICKY_T in their natural state. This was the streamer that viewers fell in love with. This was the content 
+                creator who built trust through consistency, authenticity, and genuine care. Our agents have confirmed that during 
+                this period, the subject turned down multiple sponsorship opportunities, stating: "I don't want to sell out my community."
+            </p>
+
+            <p style="color: #ff0000; font-weight: bold; margin-top: 30px;">
+                But everything changed when THE ZOINK RAID struck...
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>FILE 002: THE INCIDENT - THE ZOINK RAID</h2>
+            
+            <p>
+                On the date now marked in our records as "Z-DAY," Subject LICKY_T's channel experienced what can only be described 
+                as a catastrophic event that would permanently alter their psychological state. A massive raid, orchestrated by a 
+                content creator known only as "ZOINK," brought an unprecedented surge of viewers to the subject's broadcast.
+            </p>
+
+            <div class="warning">
+                THE FOLLOWING SECTION CONTAINS GRAPHIC EVIDENCE OF STREAMER CORRUPTION
+            </div>
+
+            <div class="stats-image">
+                <img src="PRE ZOINK.png" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+
+            <p>
+                The incident occurred approximately <span class="redacted">TIME REDACTED</span> into the subject's regular broadcast. 
+                Without warning, viewer count skyrocketed from the typical 14 concurrent viewers to numbers that our analysts initially 
+                flagged as a system error. The chat moved at speeds previously unknown to Subject LICKY_T's channel.
+            </p>
+
+            <h3>THE MOMENT OF CORRUPTION</h3>
+
+            <p>
+                Frame-by-frame analysis of archived footage reveals the exact moment Subject LICKY_T's neural pathways were rewired 
+                by greed. Our specialists have identified what we call "THE SEVEN SECONDS THAT CHANGED EVERYTHING."
+            </p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">SECONDS 0-2: INITIAL CONTACT</div>
+                    <p>Raid notification appears. Subject's eyes widen. Chat floods with new viewers. Normal processing still active.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">SECONDS 3-4: THE REALIZATION</div>
+                    <p>Subject sees viewer count. Dollar signs confirmed in subject's pupils via optical analysis. Heart rate 
+                    increases by 340%.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">SECONDS 5-7: POINT OF NO RETURN</div>
+                    <p>Subject's hand moves toward keyboard. Not to type a greeting. Not to thank the raiders. But to execute the 
+                    command that would forever brand them as GREEDY_T: SUBJECT IMMEDIATELY RUNS ADVERTISEMENTS.</p>
+                </div>
+            </div>
+
+            <p style="font-size: 24px; color: #ff0000; text-align: center; margin: 40px 0; font-weight: bold;">
+                HE IMMEDIATELY RAN ADS. NO THANK YOU. NO GREETING. JUST ADS.
+            </p>
+
+            <div class="evidence-box">
+                <strong>ADVERTISEMENT DEPLOYMENT ANALYSIS:</strong>
+                <ul style="margin-top: 10px; line-height: 2;">
+                    <li>⚠ Ad break initiated within 4 seconds of raid notification</li>
+                    <li>⚠ Duration: Maximum allowed by platform (8 minutes)</li>
+                    <li>⚠ Timing: Before acknowledging ANY raiders</li>
+                    <li>⚠ Frequency following incident: 600% increase from previous average (0)</li>
+                    <li>⚠ Priority shift detected: Money > Viewers</li>
+                </ul>
+            </div>
+
+            <p>
+                The Zoink Raiders, who had come in peace, bearing follows and subs, were greeted not with gratitude but with 
+                commercials for products they didn't need. The old guard - the 14 loyal viewers who had been there from the start - 
+                watched in horror as their streamer transformed before their eyes.
+            </p>
+
+            <div class="quote">
+                "I'll never forget that moment. The raid came in, everyone was excited, and then... ads. Just ads. He didn't even 
+                say hello. That's when I knew we lost him."
+                <br>- WITNESS [REDACTED], OG Viewer since Day 1
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>FILE 003: POST-INCIDENT BEHAVIOR - THE TRANSFORMATION</h2>
+            
+            <p>
+                Following THE ZOINK RAID, our surveillance team documented radical behavioral changes in Subject LICKY_T. The entity 
+                that emerged from that fateful stream bore little resemblance to the genuine creator we had previously observed. 
+                For classification purposes, we now refer to this new persona as "GREEDY_T."
+            </p>
+
+            <h3>DOCUMENTED BEHAVIORAL CHANGES:</h3>
+
+            <div class="grid-2">
+                <div class="evidence-box">
+                    <strong style="color: #00ff00;">BEFORE (LICKY_T):</strong>
+                    <ul style="margin-top: 10px; line-height: 2;">
+                        <li>Read every chat message</li>
+                        <li>Engaged with all viewers personally</li>
+                        <li>Zero ads during streams</li>
+                        <li>Celebrated every follow/sub</li>
+                        <li>Made viewers feel valued</li>
+                        <li>Community-first mentality</li>
+                        <li>Genuine reactions</li>
+                        <li>Accessible and humble</li>
+                    </ul>
+                </div>
+                
+                <div class="evidence-box">
+                    <strong style="color: #ff0000;">AFTER (GREEDY_T):</strong>
+                    <ul style="margin-top: 10px; line-height: 2;">
+                        <li>Ignores chat unless $$$</li>
+                        <li>Viewers treated as numbers</li>
+                        <li>Constant ad breaks</li>
+                        <li>Only cares about big donors</li>
+                        <li>Exploits viewer loyalty</li>
+                        <li>Money-first mentality</li>
+                        <li>Calculated, greedy behavior</li>
+                        <li>Treats small viewers with contempt</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>EXHIBIT A: INCRIMINATING QUOTES</h3>
+
+            <p>Our audio surveillance team has recovered the following statements from Subject GREEDY_T's broadcasts. These quotes 
+            provide damning evidence of the subject's transformation:</p>
+
+            <div class="quote">
+                "I would ban anyone for 10 gifted."
+            </div>
+
+            <p>Analysis: Subject now values monetary transactions over community relationships. The LICKY_T of old would never have 
+            made such a statement. The subject is effectively stating that loyalty, friendship, and community tenure mean nothing 
+            compared to a $50 gift sub payment.</p>
+
+            <div class="quote">
+                "You guys are just numbers."
+            </div>
+
+            <p>Analysis: Perhaps the most damning evidence of all. Subject has verbalized what our behavioral analysis already 
+            confirmed - viewers are no longer seen as individuals or community members, but as statistical data points in an 
+            analytics dashboard. The dehumanization is complete.</p>
+
+            <div class="quote">
+                "If you don't have any more to donate, go ahead and leave."
+            </div>
+
+            <p>Analysis: Subject has begun actively purging non-paying viewers from the community. This represents a complete 
+            reversal from pre-incident behavior where EVERY viewer was treasured regardless of financial contribution. GREEDY_T 
+            now operates on a "pay to stay" model.</p>
+
+            <h3>EXHIBIT B: THE AD CRISIS</h3>
+
+            <div class="evidence-box">
+                <strong>ADVERTISEMENT FREQUENCY ANALYSIS:</strong><br><br>
+                <strong>PRE-ZOINK RAID:</strong> 0 ads per stream (ZERO)<br>
+                <strong>POST-ZOINK RAID:</strong> 12-15 ads per stream<br><br>
+                
+                <strong>Ad Timing Pattern:</strong>
+                <ul style="margin-top: 10px; line-height: 2;">
+                    <li>▸ During climactic moments of gameplay</li>
+                    <li>▸ Immediately following large raids</li>
+                    <li>▸ During emotional/important chat conversations</li>
+                    <li>▸ In response to viewer milestones (intentionally ruining celebration)</li>
+                    <li>▸ Maximum duration every single time</li>
+                </ul>
+            </div>
+
+            <p>
+                Intelligence operatives have confirmed that Subject GREEDY_T now interrupts streams for advertisements with such 
+                frequency that viewers have reported missing entire segments of content. The placement of these ads appears 
+                strategically designed to maximize revenue while showing complete disregard for viewer experience.
+            </p>
+
+            <h3>EXHIBIT C: THE DEATH OF INTERACTION</h3>
+
+            <p>
+                Pre-incident, Subject LICKY_T was known for what analysts called "maximum chat engagement protocol." Every message 
+                received a response. Every emote was acknowledged. Every joke was laughed at (even the bad ones).
+            </p>
+
+            <p>
+                Post-incident, Subject GREEDY_T demonstrates what we classify as "selective attention disorder" - only responding 
+                to chat messages that include monetary symbols, gift notifications, or come from verified high-value accounts. 
+                Small viewers attempting to interact are systematically ignored unless they have recently donated.
+            </p>
+
+            <div class="evidence-box">
+                <strong>CHAT RESPONSE RATE:</strong><br><br>
+                Pre-Zoink: 98% of messages acknowledged<br>
+                Post-Zoink: 12% of messages acknowledged<br><br>
+                
+                <strong>Messages receiving responses primarily consist of:</strong>
+                <ul style="margin-top: 10px; line-height: 2;">
+                    <li>▸ Donation notifications</li>
+                    <li>▸ Subscription gifts</li>
+                    <li>▸ Bits usage</li>
+                    <li>▸ Questions about how to donate</li>
+                </ul>
+            </div>
+
+            <h3>THE RAID PROTOCOL SCANDAL</h3>
+
+            <p>
+                Perhaps most disturbing is the change in raid celebration protocol. Agents embedded in the community have reported 
+                a shocking development regarding Subject GREEDY_T's behavior during incoming raids.
+            </p>
+
+            <div class="evidence-box" style="border-color: #ff0000; border-width: 3px;">
+                <strong style="font-size: 18px;">CLASSIFIED: THE TWERK PROTOCOL</strong><br><br>
+                
+                <strong>PRE-ZOINK ERA:</strong> Subject would perform a celebratory "twerk" dance for EVERY raid, regardless of size. 
+                2 viewers? Twerk. 50 viewers? Twerk. It was a beloved community tradition that made every raider feel valued.<br><br>
+                
+                <strong>POST-ZOINK ERA:</strong> Subject now REFUSES to twerk for raids unless they match or exceed the viewer count 
+                of THE ZOINK RAID. Small and medium raids are met with indifference or minimal acknowledgment. The twerk, once a 
+                symbol of gratitude, is now locked behind a viewer count paywall.
+            </div>
+
+            <p style="color: #ff0000; font-weight: bold; font-size: 18px; margin-top: 20px;">
+                THE TWERK HAS BEEN WEAPONIZED. WHAT WAS ONCE FREELY GIVEN IS NOW WITHHELD AS A POWER MOVE.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>FILE 004: WITNESS TESTIMONIES</h2>
+            
+            <p>
+                The following testimonies have been collected from verified members of the original LICKY_T community. These individuals 
+                represent what we call "The OG Council" - long-time viewers who witnessed the transformation firsthand. Their accounts 
+                provide crucial insight into the psychological impact of Subject GREEDY_T's corruption on the community.
+            </p>
+
+            <h3>TESTIMONY COLLECTION:</h3>
+
+            <div class="testimony">
+                <div class="testimony-header">WITNESS: VIPBEBRA - STATUS: OG VIEWER - CREDIBILITY: MAXIMUM</div>
+                <img src="vipbebra.png" alt="VIPBEBRA TESTIMONY" class="testimony-image">
+                <p style="margin-top: 15px;">
+                    <strong>STATEMENT:</strong> "Zoink raid corrupted him"
+                </p>
+                <p style="margin-top: 10px; color: #aaa;">
+                    <strong>ANALYST NOTES:</strong> Subject VIPBEBRA has been present in LICKY_T's chat since the beginning. This 
+                    concise statement, while brief, carries significant weight. The use of the word "corrupted" suggests a moral 
+                    degradation rather than simple change - implying that GREEDY_T's transformation represents a fall from grace 
+                    rather than natural evolution. Cross-reference with case files shows VIPBEBRA was present the day of THE ZOINK 
+                    RAID and witnessed the transformation in real-time.
+                </p>
+            </div>
+
+            <div class="testimony">
+                <div class="testimony-header">WITNESS: SLOWIE00 - STATUS: DAY ONE SUPPORTER - CREDIBILITY: MAXIMUM</div>
+                <img src="slowie00heused.png" alt="SLOWIE00 TESTIMONY" class="testimony-image">
+                <p style="margin-top: 15px;">
+                    <strong>STATEMENT:</strong> "he used to read chat and love his viewers but now he just play ads all the time 
+                    and hate us"
+                </p>
+                <p style="margin-top: 10px; color: #aaa;">
+                    <strong>ANALYST NOTES:</strong> This testimony provides critical evidence of behavioral change in two key areas: 
+                    (1) Complete abandonment of chat engagement protocols, and (2) Replacement of community interaction with 
+                    advertisement deployment. The use of the phrase "hate us" indicates that viewers don't just feel neglected - 
+                    they feel actively antagonized by Subject GREEDY_T's new operational pattern. The emotional weight of this 
+                    statement from a day-one supporter cannot be overstated.
+                </p>
+            </div>
+
+            <div class="testimony">
+                <div class="testimony-header">WITNESS: RIPE_CLOUD - STATUS: RAID SPECIALIST - CREDIBILITY: HIGH</div>
+                <img src="ripecl.png" alt="RIPE_CLOUD TESTIMONY" class="testimony-image">
+                <p style="margin-top: 15px;">
+                    <strong>STATEMENT:</strong> "i remember when lickyt used to twerk every raid now he dont do that cuz they 
+                    not as big as zoink raid"
+                </p>
+                <p style="margin-top: 10px; color: #aaa;">
+                    <strong>ANALYST NOTES:</strong> This testimony exposes what our team has designated "The Twerk Protocol Scandal." 
+                    Subject RIPE_CLOUD confirms that pre-incident LICKY_T would perform the signature twerk celebration for ALL 
+                    raids regardless of magnitude. Post-incident GREEDY_T has implemented size requirements, effectively creating 
+                    a tiered gratitude system. This represents textbook wealth-class discrimination applied to streaming community 
+                    engagement. Small raids are no longer worthy of the celebration once freely given to all.
+                </p>
+            </div>
+
+            <div class="testimony">
+                <div class="testimony-header">WITNESS: SLOWIE00 (SECOND TESTIMONY) - STATUS: EMOTIONALLY DEVASTATED</div>
+                <img src="slowie1.png" alt="SLOWIE00 SECOND TESTIMONY" class="testimony-image">
+                <p style="margin-top: 15px;">
+                    <strong>STATEMENT:</strong> "money changed you danathaniel"
+                </p>
+                <p style="margin-top: 10px; color: #aaa;">
+                    <strong>ANALYST NOTES:</strong> This follow-up testimony from SLOWIE00 is particularly devastating. The use 
+                    of what appears to be a personal name or inside community joke ("danathaniel") followed by the accusation 
+                    "money changed you" demonstrates profound personal betrayal. This isn't just disappointment in a content creator - 
+                    this is the heartbreak of watching someone you considered a friend transform into someone unrecognizable. The 
+                    personal nature of this statement suggests SLOWIE00 and Subject had a relationship beyond typical streamer-viewer 
+                    dynamics in the pre-incident era.
+                </p>
+            </div>
+
+            <div class="warning" style="margin-top: 40px;">
+                PSYCHOLOGICAL EVALUATION: ALL WITNESSES SHOW SIGNS OF COMMUNITY TRAUMA
+            </div>
+
+            <p>
+                Our psychological operations team has assessed that these testimonies represent more than simple disappointment. 
+                The OG Council members exhibit what specialists call "parasocial betrayal syndrome" - the psychological impact of 
+                watching a trusted community figure undergo radical negative personality transformation.
+            </p>
+
+            <p>
+                These viewers didn't just lose a streamer they enjoyed. They lost what they believed was a genuine connection with 
+                another human being. Subject LICKY_T made them feel seen, valued, and important. Subject GREEDY_T makes them feel 
+                like ATM machines.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>FILE 005: PSYCHOLOGICAL PROFILE - THE CORRUPTION PROCESS</h2>
+            
+            <p>
+                Our behavioral psychology unit has developed a comprehensive analysis of what we call "The Zoink Effect" - a 
+                phenomenon wherein sudden influx of viewers and potential revenue irreversibly alters a content creator's 
+                psychological state and value system.
+            </p>
+
+            <h3>THE STAGES OF STREAMER CORRUPTION:</h3>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">STAGE 1: THE INNOCENCE</div>
+                    <p>Subject operates with pure intentions. Small viewer base creates intimate environment. Every interaction 
+                    feels personal and meaningful. Money is not a factor in content decisions. Community is everything.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">STAGE 2: THE CATALYST EVENT</div>
+                    <p>Sudden exposure to large audience (THE ZOINK RAID). Subject's neural pathways flooded with dopamine at 
+                    unprecedented levels. First taste of "big streamer" feeling. Realization of potential earnings. The seed of 
+                    greed is planted.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">STAGE 3: THE JUSTIFICATION</div>
+                    <p>Subject begins rationalizing profit-driven decisions. "I need to capitalize on this momentum." "It's just 
+                    business." "I deserve to be compensated for my work." The slide begins.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">STAGE 4: THE TRANSFORMATION</div>
+                    <p>Original values are replaced with profit-driven decision making. Small viewers become invisible. Ads become 
+                    priority. Community becomes commodity. LICKY_T dies. GREEDY_T is born.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">STAGE 5: THE POINT OF NO RETURN</div>
+                    <p>Subject fully embraces new identity. No remorse. No self-awareness. The transformation is complete. There 
+                    is no going back. GREEDY_T is permanent.</p>
+                </div>
+            </div>
+
+            <p>
+                Our analysis confirms that Subject GREEDY_T has reached Stage 5. The corruption is total and irreversible. The 
+                entity we see on screen may look like LICKY_T, may sound like LICKY_T, but make no mistake - LICKY_T no longer 
+                exists.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>FILE 006: THE SMOKING GUN - STATISTICAL EVIDENCE</h2>
+            
+            <p>
+                Numbers don't lie. While subjects can deny, deflect, and rationalize their behavior, data tells the unvarnished 
+                truth. Our analytics team has compiled irrefutable statistical evidence of the LICKY_T to GREEDY_T transformation.
+            </p>
+
+            <div class="stats-image">
+                <img src="PRE ZOINK.png" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+
+            <div class="evidence-box">
+                <strong>KEY METRICS - COMPARATIVE ANALYSIS:</strong><br><br>
+                
+                <strong>VIEWER INTERACTION RATE:</strong><br>
+                Pre-Zoink: 98% of chatters acknowledged<br>
+                Post-Zoink: 12% of chatters acknowledged<br>
+                Change: -86% (CATASTROPHIC)<br><br>
+                
+                <strong>ADVERTISEMENT DEPLOYMENT:</strong><br>
+                Pre-Zoink: 0 ads per stream<br>
+                Post-Zoink: 12-15 ads per stream<br>
+                Change: +∞% (INFINITE INCREASE)<br><br>
+                
+                <strong>RAID CELEBRATION PROTOCOL:</strong><br>
+                Pre-Zoink: 100% of raids celebrated with twerk<br>
+                Post-Zoink: <5% of raids celebrated (only largest)<br>
+                Change: -95% (DEVASTATING)<br><br>
+                
+                <strong>FOLLOWER EXCITEMENT LEVEL:</strong><br>
+                Pre-Zoink: One follow = week-long happiness<br>
+                Post-Zoink: 100 follows = barely noticed<br>
+                Change: -99.99% emotional response<br><br>
+                
+                <strong>SUB APPRECIATION:</strong><br>
+                Pre-Zoink: One sub = month-long celebration<br>
+                Post-Zoink: 20 subs = "thanks i guess"<br>
+                Change: Value decreased by 2000%<br><br>
+                
+                <strong>MONEY MENTIONS PER HOUR:</strong><br>
+                Pre-Zoink: 0.2 per hour<br>
+                Post-Zoink: 14.7 per hour<br>
+                Change: +7250% (ALARMING)
+            </div>
+
+            <p style="color: #ff0000; font-size: 20px; font-weight: bold; margin: 30px 0; text-align: center;">
+                THE NUMBERS CONFIRM COMPLETE PERSONALITY OVERRIDE
+            </p>
+        </div>
+
+        <div class="conclusion">
+            <h2 style="border: none; text-align: center; margin-bottom: 30px;">CONCLUSION: CASE CLOSED</h2>
+            
+            <p style="font-size: 18px; line-height: 2;">
+                After extensive investigation, analysis of testimony, review of documented evidence, and psychological profiling, 
+                this agency has reached an undeniable conclusion:
+            </p>
+            
+            <p style="font-size: 24px; color: #ff0000; font-weight: bold; margin: 30px 0;">
+                LICKY_T HAS BEEN FULLY CORRUPTED BY GREED
+            </p>
+            
+            <p style="font-size: 18px; line-height: 2;">
+                The transformation into GREEDY_T is complete. The subject known as LICKY_T - the genuine, caring, community-focused 
+                streamer who valued every viewer - no longer exists. In their place stands an entity driven solely by profit 
+                maximization and monetary gain.
+            </p>
+            
+            <p style="font-size: 18px; line-height: 2; margin-top: 30px;">
+                THE ZOINK RAID changed everything. What was once a beacon of authentic content creation has become a cautionary 
+                tale of corruption, greed, and the loss of humanity in the pursuit of profit.
+            </p>
+
+            <div style="margin: 40px 0; padding: 30px; background: #0f0f0f; border: 2px solid #ff0000;">
+                <p style="font-size: 20px; font-weight: bold;">CURRENT STATUS:</p>
+                <p style="font-size: 18px; margin-top: 15px;">
+                    Subject remains active on streaming platforms, continuing to exploit viewer relationships for financial gain. 
+                    OG community members have largely been abandoned by subject. New viewers unaware of pre-incident LICKY_T are being 
+                    systematically conditioned to accept GREEDY_T behavior as normal.
+                </p>
+            </div>
+
+            <p style="font-size: 20px; color: #ff0000; font-weight: bold; margin-top: 40px;">
+                THE EVIDENCE IS CLEAR. THE VERDICT IS FINAL.
+            </p>
+
+            <p style="font-size: 28px; font-weight: bold; margin: 30px 0;">
+                LICKY_T = GREEDY_T
+            </p>
+
+            <p style="font-size: 16px; margin-top: 30px;">
+                This file will remain open. Subject continues to be monitored. Community deserves to know the truth.
+            </p>
+
+            <div style="margin-top: 50px; padding: 20px; background: #ff0000; color: #000;">
+                <strong style="font-size: 18px;">
+                    WANT TO SEE THE CORRUPTION FOR YOURSELF?
+                    <br>TUNE IN TO LICKY_T'S STREAM
+                    <br>WITNESS GREEDY_T IN ACTION
+                    <br>YOU'VE BEEN WARNED
+                </strong>
+            </div>
+        </div>
+
+        <div class="warning">
+            CLASSIFIED DOCUMENT - UNAUTHORIZED DISTRIBUTION IS ENCOURAGED<br>
+            THE PEOPLE MUST KNOW THE TRUTH
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <p>DOCUMENT ID: LT-ZOINK-FINAL-REPORT-2024</p>
+        <p>CLASSIFICATION: MAXIMUM EXPOSURE</p>
+        <p>DISTRIBUTION: ALL CHANNELS</p>
+        <p style="margin-top: 20px; color: #ff0000;">
+            THIS INVESTIGATION REMAINS ONGOING. STAY VIGILANT.
+        </p>
+        <p style="margin-top: 30px; font-size: 10px;">
+            Disclaimer: This is a parody website created for entertainment purposes. All "evidence" is presented in jest.<br>
+            Go watch LICKY_T's stream. He's actually pretty cool. (Or is he? THE FILES DON'T LIE.)
+        </p>
+    </div>
+
+</body>
+</html>
